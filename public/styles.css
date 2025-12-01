@@ -1,0 +1,356 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #FFFFFF;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.header-bar {
+    background: #5a5a5a;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.header-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #c8d4a8;
+    margin: 0;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 24px;
+    background: #FFFFFF;
+}
+
+.player-container {
+    background: #FFFFFF;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.now-playing-section {
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+    background: #FFFFFF;
+}
+
+.album-art-section {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.metadata-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.radio-header {
+    display: none;
+}
+
+.status-indicator {
+    display: none;
+}
+
+.player-controls {
+    display: none;
+}
+
+.error-message {
+    background: #fee;
+    border: 1px solid #fcc;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    color: #c33;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.stream-info {
+    display: none;
+}
+
+.visualizer {
+    display: none;
+}
+
+.recently-played {
+    padding: 40px;
+    background: #c8d4a8;
+    border-radius: 0;
+    width: 100%;
+}
+
+.widget-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #231F20;
+    margin: 0 0 20px 0;
+    letter-spacing: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.track-info {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.album-art {
+    width: 500px;
+    height: 500px;
+    border-radius: 0;
+    object-fit: cover;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    display: block;
+}
+
+.track-main {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+.track-text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.track-artist {
+    font-size: 2.5rem;
+    color: #231F20;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 10px;
+}
+
+.track-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #231F20;
+    margin-bottom: 20px;
+}
+
+.track-album {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #231F20;
+    margin-bottom: 15px;
+}
+
+.track-quality {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.quality-line {
+    font-style: italic;
+}
+
+.audio-player-controls {
+    background: #4a4a4a;
+    border-radius: 8px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.play-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #4a4a4a;
+    transition: all 0.3s ease;
+}
+
+.play-btn:hover {
+    transform: scale(1.1);
+}
+
+.time-display {
+    color: white;
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.volume-icon {
+    color: white;
+    font-size: 1.3rem;
+}
+
+.volume-slider {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: #6a6a6a;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
+}
+
+.rating-section {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.rating-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.rating-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.rating-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.rating-button:hover:not(:disabled) {
+    transform: scale(1.1);
+}
+
+.rating-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.rating-button.active {
+    opacity: 1;
+}
+
+.rating-count {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #231F20;
+}
+
+.rating-icon {
+    font-size: 1.8rem;
+}
+
+.track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recent-track {
+    margin-bottom: 8px;
+}
+
+.recent-track-artist {
+    color: #231F20;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.recent-track-title {
+    color: #666;
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+.recent-track-loading {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-style: italic;
+}
+
+@media (max-width: 900px) {
+    .player-container {
+        flex-direction: column;
+    }
+
+    .player-section {
+        flex: 1;
+    }
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Calico - Live Stream</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <header class="header-bar">
+        <img src="/logo.png" alt="Radio Calico" class="logo">
+        <h1 class="header-title">Radio Calico</h1>
+    </header>
+
+    <div class="main-content">
+        <div class="player-container">
+            <div class="now-playing-section">
+                <div class="album-art-section">
+                    <img src="https://d3d4yli4hf5bmh.cloudfront.net/cover.jpg" alt="Album Art" class="album-art" id="albumArt">
+                </div>
+
+                <div class="metadata-section">
+                    <div class="track-artist" id="currentArtist">Shandi Sinnamon</div>
+                    <div class="track-title" id="currentTitle">He's A Dream (1983)</div>
+                    <div class="track-album" id="currentAlbum">Flashdance (Original Motion Picture Soundtrack)</div>
+
+                    <div class="track-quality">
+                        <div class="quality-line" id="sourceQuality">Source quality: Loading...</div>
+                        <div class="quality-line" id="streamQuality">Stream quality: Loading...</div>
+                    </div>
+
+                    <div class="rating-section">
+                        <div class="rating-label">Rate this track:</div>
+                        <div class="rating-buttons">
+                            <button class="rating-button" id="thumbsUpBtn" onclick="rateSong(1)">
+                                <span class="rating-icon">👍</span>
+                                <span class="rating-count" id="thumbsUpCount">0</span>
+                            </button>
+                            <button class="rating-button" id="thumbsDownBtn" onclick="rateSong(-1)">
+                                <span class="rating-icon">👎</span>
+                                <span class="rating-count" id="thumbsDownCount">0</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="audio-player-controls">
+                        <button class="play-btn" id="playButton">
+                            <span id="playIcon">▶</span>
+                        </button>
+                        <span class="time-display"><span id="elapsedTime">0:35</span> / Live</span>
+                        <span class="volume-icon">🔊</span>
+                        <input type="range" min="0" max="100" value="70" class="volume-slider" id="volumeSlider">
+                    </div>
+                </div>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="recently-played">
+                <h3 class="widget-title">Previous tracks:</h3>
+                <div class="track-list" id="trackList">
+                    <div class="recent-track-loading">Loading track history...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer" preload="none"></audio>
+
+    <script src="/app.js"></script>
+</body>
+</html>
