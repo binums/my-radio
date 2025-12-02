@@ -227,3 +227,5 @@ security-report:
 	@mkdir -p reports
 	npm audit --json > reports/security-audit-$$(date +%Y%m%d-%H%M%S).json
 	@echo "$(GREEN)Security report saved to reports/$(NC)"
+	@echo "$(YELLOW)⚠️  Note: Security reports may contain sensitive information about your dependencies.$(NC)"
+	@echo "$(YELLOW)   Review before sharing publicly.$(NC)"

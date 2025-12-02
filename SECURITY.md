@@ -352,7 +352,7 @@ DB_PASSWORD=mysecretpassword
 If you discover a security vulnerability:
 
 1. **DO NOT** open a public GitHub issue
-2. Email security contact (add your email here)
+2. Email security@radiocalico.com or contact binums@users.noreply.github.com
 3. Include detailed description
 4. Provide steps to reproduce
 5. Suggest a fix if possible
@@ -476,9 +476,10 @@ Security activities are logged:
 
 ### Security Contacts
 
-- Security Email: [Add your email]
+- Security Email: security@radiocalico.com
+- GitHub Contact: binums@users.noreply.github.com
 - GitHub Security: Use GitHub Security Advisories
-- Project Maintainers: See CONTRIBUTORS.md
+- Project Maintainers: @binums
 
 ## Updates to This Policy
 
