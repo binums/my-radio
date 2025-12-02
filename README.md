@@ -13,6 +13,7 @@ A streaming radio web application that plays lossless audio (HLS FLAC) with real
 - **Comprehensive Testing**: 96 tests with 87% coverage
 - **Docker Support**: Production and development containers
 - **Security Scanning**: Built-in npm audit integration
+- **CI/CD Ready**: GitHub Actions workflows for automated testing
 
 ## Quick Start
 
@@ -148,9 +149,11 @@ NODE_ENV=development
 
 ## Documentation
 
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture diagrams (Mermaid)
 - **[DOCKER.md](DOCKER.md)** - Comprehensive Docker deployment guide
 - **[TESTING.md](TESTING.md)** - Testing framework and coverage
 - **[SECURITY.md](SECURITY.md)** - Security policies and scanning procedures
+- **[.github/workflows/README.md](.github/workflows/README.md)** - CI/CD workflows and setup
 - **[CLAUDE.md](CLAUDE.md)** - Development guidelines and architecture
 - **[tests/README.md](tests/README.md)** - Detailed testing documentation
 
