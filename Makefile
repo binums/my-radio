@@ -1,7 +1,7 @@
 # Makefile for Radio Calico Docker operations
 # Provides convenient commands for development and production
 
-.PHONY: help build up down logs restart clean test dev dev-build dev-down dev-logs dev-test backup restore
+.PHONY: help build up down logs restart clean test dev dev-build dev-down dev-logs dev-test backup restore security security-check security-fix security-scan
 
 # Default target
 .DEFAULT_GOAL := help
@@ -37,6 +37,13 @@ help:
 	@echo "  make restore        - Restore production database from backup.sql"
 	@echo "  make db-shell       - Open PostgreSQL shell (production)"
 	@echo "  make db-shell-dev   - Open PostgreSQL shell (development)"
+	@echo ""
+	@echo "$(GREEN)Security Commands:$(NC)"
+	@echo "  make security       - Run security audit"
+	@echo "  make security-check - Run security audit (fail on moderate+)"
+	@echo "  make security-fix   - Automatically fix security issues"
+	@echo "  make security-scan  - Full security scan (audit + outdated packages)"
+	@echo "  make security-docker - Run security scan in Docker container"
 	@echo ""
 	@echo "$(GREEN)Maintenance Commands:$(NC)"
 	@echo "  make clean          - Remove containers and volumes (WARNING: deletes data)"
@@ -177,3 +184,46 @@ update:
 	@echo "$(BLUE)Rebuilding containers...$(NC)"
 	docker-compose up -d --build
 	@echo "$(GREEN)Update complete$(NC)"
+
+## security: Run security audit
+security:
+	@echo "$(BLUE)Running security audit...$(NC)"
+	@npm audit || true
+	@echo ""
+	@echo "$(GREEN)Security audit complete$(NC)"
+
+## security-check: Run security audit (fail on moderate+)
+security-check:
+	@echo "$(BLUE)Running security audit (fail on moderate+ vulnerabilities)...$(NC)"
+	npm run security:check
+
+## security-fix: Automatically fix security issues
+security-fix:
+	@echo "$(BLUE)Attempting to fix security vulnerabilities...$(NC)"
+	npm audit fix
+	@echo "$(GREEN)Security fixes applied$(NC)"
+
+## security-scan: Full security scan (audit + outdated packages)
+security-scan:
+	@echo "$(BLUE)Running full security scan...$(NC)"
+	@echo ""
+	@echo "$(YELLOW)=== NPM Security Audit ===$(NC)"
+	@npm audit || true
+	@echo ""
+	@echo "$(YELLOW)=== Outdated Packages ===$(NC)"
+	@npm outdated || true
+	@echo ""
+	@echo "$(GREEN)Full security scan complete$(NC)"
+
+## security-docker: Run security scan in Docker container
+security-docker:
+	@echo "$(BLUE)Running security scan in Docker container...$(NC)"
+	docker-compose -f docker-compose.dev.yml exec app npm run security:full || \
+	docker-compose -f docker-compose.dev.yml run --rm app npm run security:full
+
+## security-report: Generate security report (JSON format)
+security-report:
+	@echo "$(BLUE)Generating security report...$(NC)"
+	@mkdir -p reports
+	npm audit --json > reports/security-audit-$$(date +%Y%m%d-%H%M%S).json
+	@echo "$(GREEN)Security report saved to reports/$(NC)"

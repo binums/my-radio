@@ -75,6 +75,14 @@ npm run test:watch          # Run tests in watch mode
 npm run test:coverage       # Run tests with coverage report
 ```
 
+**Security scanning:**
+```bash
+npm run security:audit      # Run security audit
+npm run security:audit-fix  # Fix security vulnerabilities
+npm run security:check      # Check (fail on moderate+)
+npm run security:full       # Full scan (audit + outdated)
+```
+
 ### Docker Development
 
 **Quick start (using Makefile):**
@@ -82,6 +90,7 @@ npm run test:coverage       # Run tests with coverage report
 make dev                    # Start development environment
 make dev-logs               # View logs
 make dev-test               # Run tests in container
+make security               # Run security audit
 make dev-down               # Stop development environment
 ```
 
