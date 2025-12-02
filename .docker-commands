@@ -1,0 +1,59 @@
+# Quick Docker Command Reference for Radio Calico
+
+## Production Commands
+make build              # Build production images
+make up                 # Start production services
+make down               # Stop production services
+make logs               # View production logs
+make restart            # Restart production services
+make ps                 # Show running containers
+
+## Development Commands
+make dev                # Start development environment
+make dev-build          # Build and start dev environment
+make dev-down           # Stop development environment
+make dev-logs           # View development logs
+make dev-test           # Run tests in container
+make dev-shell          # Open shell in container
+
+## Database Commands
+make backup             # Backup production database
+make restore            # Restore from backup.sql
+make db-shell           # PostgreSQL shell (production)
+make db-shell-dev       # PostgreSQL shell (development)
+
+## Maintenance Commands
+make clean              # Remove containers and volumes
+make clean-images       # Remove Docker images
+make clean-all          # Full cleanup
+make health             # Check service health
+
+## Direct Docker Commands (without make)
+
+# Production
+docker-compose up -d
+docker-compose down
+docker-compose logs -f app
+docker-compose ps
+
+# Development
+docker-compose -f docker-compose.dev.yml up -d
+docker-compose -f docker-compose.dev.yml exec app npm test
+docker-compose -f docker-compose.dev.yml exec app sh
+docker-compose -f docker-compose.dev.yml down
+
+# Database access
+docker-compose exec postgres psql -U admin -d prototype_db
+docker-compose -f docker-compose.dev.yml exec postgres psql -U admin -d prototype_db
+
+# Backup/Restore
+docker-compose exec -T postgres pg_dump -U admin prototype_db > backup.sql
+docker-compose exec -T postgres psql -U admin prototype_db < backup.sql
+
+## URLs
+Application: http://localhost:3000
+Health Check: http://localhost:3000/api/health
+API Docs: See README.md
+
+## Documentation
+See DOCKER.md for comprehensive deployment guide

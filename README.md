@@ -1,26 +1,58 @@
-# RadioCalico - Local Development Environment
+# Radio Calico
 
-A Node.js/Express web server with PostgreSQL database for local prototyping.
+A streaming radio web application that plays lossless audio (HLS FLAC) with real-time metadata display, album artwork, and song rating functionality.
 
-## Setup Complete
+## Features
 
-Your development environment is ready to use with:
-- **Web Server**: Express.js (Node.js v25.1.0)
-- **Database**: PostgreSQL 16.11
-- **Database Name**: `prototype_db`
-- **Server Port**: 3000
+- **Lossless Audio Streaming**: HLS FLAC audio playback with HLS.js
+- **Real-time Metadata**: Track info updates every 2 seconds
+- **Album Artwork**: Dynamic cover art display
+- **Song Rating System**: Thumbs up/down with user fingerprinting
+- **Recently Played**: Last 5 tracks with album art
+- **Responsive Design**: Mobile-friendly interface
+- **Comprehensive Testing**: 96 tests with 87% coverage
+- **Docker Support**: Production and development containers
 
 ## Quick Start
 
-1. **Start the server:**
-   ```bash
-   npm start
-   ```
+### Using Docker (Recommended)
 
-2. **Access your application:**
-   - Main API: http://localhost:3000
-   - Health check: http://localhost:3000/health
-   - Test endpoint: http://localhost:3000/api/test
+```bash
+# Clone the repository
+git clone <repository-url>
+cd radiocalico
+
+# Start with Docker Compose
+docker-compose up -d
+
+# Access the application
+open http://localhost:3000
+```
+
+### Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start PostgreSQL (if not running)
+brew services start postgresql@16
+
+# Start the server
+npm start
+
+# Access the application
+open http://localhost:3000
+```
+
+### Using Make Commands
+
+```bash
+make dev                # Start development environment
+make dev-test           # Run tests
+make up                 # Start production
+make help               # Show all commands
+```
 
 ## Project Structure
 
@@ -112,27 +144,38 @@ PORT=3000
 NODE_ENV=development
 ```
 
-## Next Steps
+## Documentation
 
-1. Create your database tables in `prototype_db`
-2. Add your API routes to `server.js`
-3. Build your frontend (HTML/CSS/JS)
-4. Connect your frontend to the API endpoints
+- **[DOCKER.md](DOCKER.md)** - Comprehensive Docker deployment guide
+- **[TESTING.md](TESTING.md)** - Testing framework and coverage
+- **[CLAUDE.md](CLAUDE.md)** - Development guidelines and architecture
+- **[tests/README.md](tests/README.md)** - Detailed testing documentation
 
-## Adding New Routes
+## Technology Stack
 
-Example of adding a new route in `server.js`:
+**Backend:**
+- Node.js with Express.js
+- PostgreSQL 16 with connection pooling
+- Environment-based configuration
 
-```javascript
-app.get('/api/users', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM users');
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-```
+**Frontend:**
+- Vanilla JavaScript (modular architecture)
+- HLS.js for audio streaming
+- Canvas/WebGL fingerprinting
+- Responsive CSS
+
+**Testing:**
+- Jest test runner
+- Supertest for API testing
+- Testing Library for DOM testing
+- jsdom for browser simulation
+- 96 tests, 87% coverage
+
+**DevOps:**
+- Docker multi-stage builds
+- Docker Compose for orchestration
+- Health checks and monitoring
+- Makefile for convenience commands
 
 ## Troubleshooting
 

@@ -27,3 +27,8 @@ coverage/
 *.lcov
 test-results/
 junit.xml
+
+# Docker
+docker-compose.override.yml
+.docker/
+*.sql.backup
