@@ -20,3 +20,10 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+test-results/
+junit.xml

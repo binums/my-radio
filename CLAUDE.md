@@ -6,6 +6,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Radio Calico is a streaming radio web application that plays lossless audio (HLS FLAC) with real-time metadata display, album artwork, and song rating functionality. The application consists of a Node.js/Express backend with PostgreSQL database and a single-page HTML/CSS/JS frontend.
 
+## File Structure
+
+```
+radiocalico/
+├── server.js                  # Express server (exports app & pool for testing)
+├── package.json               # Dependencies and test scripts
+├── jest.config.js             # Jest test configuration
+├── .env                       # Environment variables
+├── CLAUDE.md                  # This file - project documentation
+├── README.md                  # Project overview
+├── TESTING.md                 # Testing framework documentation
+├── .test-commands             # Quick reference for test commands
+│
+├── public/                    # Frontend files (served statically)
+│   ├── index.html            # Main HTML page
+│   ├── styles.css            # All CSS styling
+│   ├── app.js                # Main application logic (production)
+│   ├── app.module.js         # Modular version for testing
+│   └── logo.png              # Radio Calico logo
+│
+└── tests/                     # Test suite (96 tests, 87% coverage)
+    ├── README.md             # Testing guide
+    ├── backend/              # Backend tests (42 tests)
+    │   ├── api.test.js       # API endpoints
+    │   └── ratings.test.js   # Rating system
+    ├── frontend/             # Frontend tests (54 tests)
+    │   ├── fingerprinting.test.js
+    │   ├── ratings.test.js
+    │   ├── metadata.test.js
+    │   └── ui.test.js
+    └── setup/                # Test configuration
+        ├── backend.setup.js
+        ├── frontend.setup.js
+        └── __mocks__/
+            └── styleMock.js
+```
+
 ## Development Commands
 
 **Start the server:**
@@ -15,9 +52,19 @@ npm start
 npm start &
 ```
 
+**Run tests:**
+```bash
+npm test                    # Run all tests (backend + frontend)
+npm run test:backend        # Run backend tests only
+npm run test:frontend       # Run frontend tests only
+npm run test:watch          # Run tests in watch mode
+npm run test:coverage       # Run tests with coverage report
+```
+
 **Access PostgreSQL database:**
 ```bash
 /opt/homebrew/opt/postgresql@16/bin/psql prototype_db
+/opt/homebrew/opt/postgresql@16/bin/psql prototype_db_test  # Test database
 ```
 
 **List database tables:**
@@ -37,9 +84,10 @@ brew services restart postgresql@16
 - **PostgreSQL connection pool** using `pg` library
 - Environment variables loaded via `dotenv`
 - Static files served from `/public` directory
+- **Exports:** `app` and `pool` for unit testing (server only starts when run directly)
 
 ### Database Schema
-Database name: `prototype_db`
+Database name: `prototype_db` (production), `prototype_db_test` (testing)
 
 **song_ratings table:**
 - `id` (integer, primary key, auto-increment)
@@ -50,6 +98,11 @@ Database name: `prototype_db`
 - `created_at` (timestamp, defaults to CURRENT_TIMESTAMP)
 - Unique constraint on (artist, title, user_fingerprint) for upserts
 - Index on (artist, title) for query performance
+
+**Test Database:**
+- Same schema as production
+- Automatically cleaned up after each test
+- Database name: `prototype_db_test`
 
 ### API Endpoints
 
@@ -64,7 +117,7 @@ Database name: `prototype_db`
 **GET /api/client-ip** - Returns client IP address (used for fingerprinting)
 
 ### Frontend Structure
-The frontend follows a clean separation of concerns with three main files in `/public`:
+The frontend follows a clean separation of concerns with files in `/public`:
 
 **public/index.html** - Structure and content
 - HTML markup for the single-page application
@@ -76,13 +129,20 @@ The frontend follows a clean separation of concerns with three main files in `/p
 - Responsive design with mobile breakpoints
 - Custom styling for audio controls, rating buttons, and track display
 
-**public/app.js** - Application logic and interactivity
-- **HLS.js** integration for streaming audio playback (with Safari native HLS fallback)
-- Metadata polling: fetches from external API every 2 seconds to update track info
-- User fingerprinting: generates unique ID from browser features, canvas/WebGL fingerprints, and IP
-- Rating system: handles thumbs up/down submissions and real-time updates
-- Audio controls: play/pause, volume, elapsed time tracking
-- DOM manipulation: updates current track, album art, and recently played list
+**public/app.module.js** - Core application logic (shared library)
+- **All reusable functions** exported as a module
+- Organized into logical modules: fingerprinting, metadata, rating, UI, audio player, validation
+- Works in both browser (global `window.RadioCalicoModule`) and Node.js (CommonJS)
+- Used by both production app.js and test suite
+- **Single source of truth** - no code duplication
+
+**public/app.js** - Application initialization and orchestration
+- Imports functions from app.module.js
+- Application state management (currentTrack, timers, intervals)
+- Coordinates between modules (metadata polling, rating updates, elapsed time)
+- HLS.js error handling and recovery
+- UI event handlers and initialization
+- **Only ~250 lines** - focused on glue code and application flow
 
 ### External Dependencies
 The frontend fetches from an external CDN:
@@ -101,6 +161,52 @@ The project follows a specific design system documented in `RadioCalico_Style_Gu
   - Charcoal (#231F20)
 - Current implementation uses different colors (gray header #5a5a5a, mint background #c8d4a8) - note this discrepancy if working on UI
 
+## Testing Framework
+
+Radio Calico has a comprehensive test suite covering both backend and frontend.
+
+**Test Coverage:**
+- 96 passing tests (42 backend, 54 frontend)
+- 87% overall code coverage
+- Backend: 76% coverage
+- Frontend: 92% coverage
+
+**Test Structure:**
+```
+tests/
+├── backend/
+│   ├── api.test.js         # API endpoints (health, static files, etc.)
+│   └── ratings.test.js     # Rating system endpoints
+├── frontend/
+│   ├── fingerprinting.test.js  # User fingerprinting logic
+│   ├── ratings.test.js         # Rating UI and integration
+│   ├── metadata.test.js        # Metadata fetching and display
+│   └── ui.test.js              # UI interactions (play/pause, volume)
+└── setup/
+    ├── backend.setup.js    # Backend test configuration
+    ├── frontend.setup.js   # Frontend mocks (HLS.js, crypto, etc.)
+    └── __mocks__/          # CSS and other mocks
+```
+
+**Testing Tools:**
+- **Jest** - Test runner and assertions
+- **Supertest** - HTTP API testing
+- **Testing Library** - DOM testing utilities
+- **jsdom** - Browser environment simulation
+- Mocks for: HLS.js, crypto.subtle, canvas, WebGL, fetch, localStorage
+
+**Key Testing Features:**
+- Backend tests use real PostgreSQL database (`prototype_db_test`)
+- Frontend tests use comprehensive browser API mocks
+- Automatic test data cleanup
+- Fast execution (~0.8 seconds)
+- CI/CD ready
+
+**Documentation:**
+- `tests/README.md` - Comprehensive testing guide
+- `TESTING.md` - Implementation summary and test coverage details
+- `.test-commands` - Quick reference for test commands
+
 ## Environment Configuration
 
 Configuration is stored in `.env`:
@@ -111,3 +217,8 @@ Configuration is stored in `.env`:
 - `DB_PASSWORD` - Database password (empty for local dev)
 - `PORT` - Server port (default: 3000)
 - `NODE_ENV` - Environment (default: development)
+
+**Test Environment Variables:**
+- Test database uses same variables with `TEST_` prefix
+- Test database name: `prototype_db_test`
+- Test server port: 3001 (to avoid conflicts)
