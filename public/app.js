@@ -23,7 +23,6 @@ const {
   submitRating,
   showError,
   initializeHLS,
-  setupPlayPauseButton,
   setupVolumeControl,
   validateRatingInput,
 } = window.RadioCalicoModule || {};
@@ -201,21 +200,15 @@ function initializeAudioPlayer() {
 // ========== UI SETUP ==========
 
 function initializeUI() {
-  // Setup play/pause button
-  const { getIsPlaying } = setupPlayPauseButton(audio, playButton, playIcon);
-
-  // Override the play button to also handle elapsed timer
-  const originalClickHandler = playButton.onclick;
-  playButton.onclick = null;
-
+  // Setup play/pause button with custom callback for elapsed timer
   playButton.addEventListener('click', function () {
-    const wasPlaying = getIsPlaying();
-
-    if (wasPlaying) {
+    if (!audio.paused) {
+      // Currently playing, so pause it
       audio.pause();
       playIcon.textContent = '▶';
       stopElapsedTimer();
     } else {
+      // Currently paused, so play it
       audio
         .play()
         .then(() => {

@@ -14,10 +14,22 @@ radiocalico/
 ├── package.json               # Dependencies and test scripts
 ├── jest.config.js             # Jest test configuration
 ├── .env                       # Environment variables
+├── .env.example               # Environment variables template
 ├── CLAUDE.md                  # This file - project documentation
 ├── README.md                  # Project overview
 ├── TESTING.md                 # Testing framework documentation
+├── DOCKER.md                  # Docker deployment guide
 ├── .test-commands             # Quick reference for test commands
+├── Makefile                   # Docker convenience commands
+│
+├── docker/                    # Docker configuration
+│   └── init.sql              # Database initialization script
+│
+├── Dockerfile                 # Production Docker image
+├── Dockerfile.dev             # Development Docker image
+├── docker-compose.yml         # Production Docker Compose
+├── docker-compose.dev.yml     # Development Docker Compose
+├── .dockerignore              # Docker build exclusions
 │
 ├── public/                    # Frontend files (served statically)
 │   ├── index.html            # Main HTML page
@@ -45,6 +57,8 @@ radiocalico/
 
 ## Development Commands
 
+### Local Development
+
 **Start the server:**
 ```bash
 npm start
@@ -60,6 +74,37 @@ npm run test:frontend       # Run frontend tests only
 npm run test:watch          # Run tests in watch mode
 npm run test:coverage       # Run tests with coverage report
 ```
+
+### Docker Development
+
+**Quick start (using Makefile):**
+```bash
+make dev                    # Start development environment
+make dev-logs               # View logs
+make dev-test               # Run tests in container
+make dev-down               # Stop development environment
+```
+
+**Production deployment:**
+```bash
+make build                  # Build production images
+make up                     # Start production services
+make logs                   # View logs
+make down                   # Stop services
+```
+
+**Using docker-compose directly:**
+```bash
+# Development
+docker-compose -f docker-compose.dev.yml up -d
+docker-compose -f docker-compose.dev.yml exec app npm test
+
+# Production
+docker-compose up -d
+docker-compose logs -f app
+```
+
+See `DOCKER.md` for comprehensive Docker deployment documentation.
 
 **Access PostgreSQL database:**
 ```bash

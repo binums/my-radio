@@ -1,0 +1,55 @@
+# Node modules
+node_modules/
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Test files
+coverage/
+.nyc_output/
+*.lcov
+test-results/
+junit.xml
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation (not needed in container)
+*.md
+!README.md
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# CI/CD files
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Other build artifacts
+dist/
+build/
