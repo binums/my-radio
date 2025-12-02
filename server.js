@@ -82,6 +82,24 @@ app.post('/api/ratings', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Validate input types
+    if (typeof artist !== 'string' || typeof title !== 'string' || typeof userFingerprint !== 'string') {
+      return res.status(400).json({ error: 'Artist, title, and userFingerprint must be strings' });
+    }
+
+    // Add length limits to prevent DoS attacks
+    if (artist.length > 255) {
+      return res.status(400).json({ error: 'Artist name exceeds maximum length of 255 characters' });
+    }
+
+    if (title.length > 255) {
+      return res.status(400).json({ error: 'Title exceeds maximum length of 255 characters' });
+    }
+
+    if (userFingerprint.length > 255) {
+      return res.status(400).json({ error: 'User fingerprint exceeds maximum length of 255 characters' });
+    }
+
     if (rating !== 1 && rating !== -1) {
       return res.status(400).json({ error: 'Rating must be 1 or -1' });
     }

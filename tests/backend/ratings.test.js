@@ -123,6 +123,117 @@ describe('Rating System API Tests', () => {
       expect(response.body).toHaveProperty('error', 'Missing required fields');
     });
 
+    test('should reject non-string artist field', async () => {
+      const response = await request(app)
+        .post('/api/ratings')
+        .send({
+          artist: 12345,
+          title: testTitle,
+          rating: 1,
+          userFingerprint: testFingerprint,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'Artist, title, and userFingerprint must be strings');
+    });
+
+    test('should reject non-string title field', async () => {
+      const response = await request(app)
+        .post('/api/ratings')
+        .send({
+          artist: testArtist,
+          title: { name: 'Song' },
+          rating: 1,
+          userFingerprint: testFingerprint,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'Artist, title, and userFingerprint must be strings');
+    });
+
+    test('should reject non-string userFingerprint field', async () => {
+      const response = await request(app)
+        .post('/api/ratings')
+        .send({
+          artist: testArtist,
+          title: testTitle,
+          rating: 1,
+          userFingerprint: ['array', 'of', 'values'],
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'Artist, title, and userFingerprint must be strings');
+    });
+
+    test('should reject artist exceeding 255 characters', async () => {
+      const longArtist = 'A'.repeat(256);
+      const response = await request(app)
+        .post('/api/ratings')
+        .send({
+          artist: longArtist,
+          title: testTitle,
+          rating: 1,
+          userFingerprint: testFingerprint,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'Artist name exceeds maximum length of 255 characters');
+    });
+
+    test('should reject title exceeding 255 characters', async () => {
+      const longTitle = 'T'.repeat(256);
+      const response = await request(app)
+        .post('/api/ratings')
+        .send({
+          artist: testArtist,
+          title: longTitle,
+          rating: 1,
+          userFingerprint: testFingerprint,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'Title exceeds maximum length of 255 characters');
+    });
+
+    test('should reject userFingerprint exceeding 255 characters', async () => {
+      const longFingerprint = 'F'.repeat(256);
+      const response = await request(app)
+        .post('/api/ratings')
+        .send({
+          artist: testArtist,
+          title: testTitle,
+          rating: 1,
+          userFingerprint: longFingerprint,
+        });
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty('error', 'User fingerprint exceeds maximum length of 255 characters');
+    });
+
+    test('should accept fields exactly at 255 character limit', async () => {
+      const maxLengthArtist = 'A'.repeat(255);
+      const maxLengthTitle = 'T'.repeat(255);
+      const maxLengthFingerprint = 'F'.repeat(255);
+
+      const response = await request(app)
+        .post('/api/ratings')
+        .send({
+          artist: maxLengthArtist,
+          title: maxLengthTitle,
+          rating: 1,
+          userFingerprint: maxLengthFingerprint,
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('success', true);
+
+      // Cleanup
+      await pool.query(
+        'DELETE FROM song_ratings WHERE artist = $1 AND title = $2',
+        [maxLengthArtist, maxLengthTitle]
+      );
+    });
+
     test('should update existing user rating (upsert functionality)', async () => {
       // First rating: thumbs up
       await request(app)
