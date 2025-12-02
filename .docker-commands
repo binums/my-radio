@@ -22,6 +22,14 @@ make restore            # Restore from backup.sql
 make db-shell           # PostgreSQL shell (production)
 make db-shell-dev       # PostgreSQL shell (development)
 
+## Security Commands
+make security           # Run security audit
+make security-check     # Security audit (fail on moderate+)
+make security-fix       # Automatically fix security issues
+make security-scan      # Full security scan (audit + outdated)
+make security-docker    # Run security scan in Docker
+make security-report    # Generate JSON security report
+
 ## Maintenance Commands
 make clean              # Remove containers and volumes
 make clean-images       # Remove Docker images
