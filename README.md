@@ -12,6 +12,7 @@ A streaming radio web application that plays lossless audio (HLS FLAC) with real
 - **Responsive Design**: Mobile-friendly interface
 - **Comprehensive Testing**: 96 tests with 87% coverage
 - **Docker Support**: Production and development containers
+- **Security Scanning**: Built-in npm audit integration
 
 ## Quick Start
 
@@ -50,6 +51,7 @@ open http://localhost:3000
 ```bash
 make dev                # Start development environment
 make dev-test           # Run tests
+make security           # Run security audit
 make up                 # Start production
 make help               # Show all commands
 ```
@@ -148,6 +150,7 @@ NODE_ENV=development
 
 - **[DOCKER.md](DOCKER.md)** - Comprehensive Docker deployment guide
 - **[TESTING.md](TESTING.md)** - Testing framework and coverage
+- **[SECURITY.md](SECURITY.md)** - Security policies and scanning procedures
 - **[CLAUDE.md](CLAUDE.md)** - Development guidelines and architecture
 - **[tests/README.md](tests/README.md)** - Detailed testing documentation
 

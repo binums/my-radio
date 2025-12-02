@@ -11,7 +11,12 @@
     "test:frontend": "jest --selectProject=frontend",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:verbose": "jest --verbose"
+    "test:verbose": "jest --verbose",
+    "security:audit": "npm audit",
+    "security:audit-fix": "npm audit fix",
+    "security:audit-json": "npm audit --json",
+    "security:check": "npm audit --audit-level=moderate",
+    "security:full": "npm audit && npm outdated"
   },
   "keywords": [],
   "author": "",
