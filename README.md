@@ -149,6 +149,7 @@ NODE_ENV=development
 
 ## Documentation
 
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture diagrams (Mermaid)
 - **[DOCKER.md](DOCKER.md)** - Comprehensive Docker deployment guide
 - **[TESTING.md](TESTING.md)** - Testing framework and coverage
 - **[SECURITY.md](SECURITY.md)** - Security policies and scanning procedures
