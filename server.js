@@ -82,6 +82,24 @@ app.post('/api/ratings', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Validate input types
+    if (typeof artist !== 'string' || typeof title !== 'string' || typeof userFingerprint !== 'string') {
+      return res.status(400).json({ error: 'Artist, title, and userFingerprint must be strings' });
+    }
+
+    // Add length limits to prevent DoS attacks
+    if (artist.length > 255) {
+      return res.status(400).json({ error: 'Artist name exceeds maximum length of 255 characters' });
+    }
+
+    if (title.length > 255) {
+      return res.status(400).json({ error: 'Title exceeds maximum length of 255 characters' });
+    }
+
+    if (userFingerprint.length > 255) {
+      return res.status(400).json({ error: 'User fingerprint exceeds maximum length of 255 characters' });
+    }
+
     if (rating !== 1 && rating !== -1) {
       return res.status(400).json({ error: 'Rating must be 1 or -1' });
     }
@@ -181,16 +199,21 @@ app.get('/api/client-ip', (req, res) => {
   res.json({ ip });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
-});
+// Export app for testing
+module.exports = { app, pool };
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  pool.end(() => {
-    console.log('Database pool closed');
+// Only start server if this file is run directly (not imported)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV}`);
   });
-});
+
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    pool.end(() => {
+      console.log('Database pool closed');
+    });
+  });
+}
